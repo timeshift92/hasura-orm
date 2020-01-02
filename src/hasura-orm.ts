@@ -27,7 +27,7 @@ export default class Hasura {
   }
 
   select(fields: string) {
-    this._fields = fields.replace(/,/g, ' ')
+    this._fields += ' ' + fields.replace(/,/g, ' ')
     return this
   }
   limit(limit: number) {

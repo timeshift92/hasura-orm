@@ -1,4 +1,5 @@
-const _stringify = require('stringify-object')
+import * as stringifyObject from 'stringify-object'
+const _stringify = stringifyObject
 
 export function stringify(object: any): any {
   return _stringify(object, {

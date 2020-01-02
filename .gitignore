@@ -10,3 +10,7 @@ compiled
 .awcache
 .rpt2_cache
 docs
+yarn.lock
+package-lock.json
+.history
+.rpt2_cache
