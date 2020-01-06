@@ -15,7 +15,6 @@ export function hasRelation(value: any) {
     if (typeof value[key] === 'object' && value.objects) {
       return value
     } else if (Array.isArray(value[key])) {
-      console.log(value)
       value[key] = { data: value[key] }
     }
     return value

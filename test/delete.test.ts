@@ -5,4 +5,14 @@ describe('delete test', () => {
     expect(new Delete('products').delete({ rest: 1 }).query()).toBeTruthy()
   })
   console.log(new Delete('products').delete({ rest: 1 }).query())
+
+  it('check provider', () => {
+    const provider = {
+      mutate: ({ query }: any) => {
+        return query
+      }
+    }
+    let query = new Delete('products', provider).delete({ rest: 1 })
+    expect(query.mutate()).toBeTruthy()
+  })
 })

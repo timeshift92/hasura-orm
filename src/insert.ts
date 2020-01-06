@@ -19,7 +19,7 @@ export default class Insert extends Hasura {
   }
 
   mutate() {
-    this.provider.mutate({ query: this.query() })
+    return this.provider.mutate({ query: this.query() })
   }
 
   parsed() {
