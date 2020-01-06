@@ -6,7 +6,7 @@ describe('updert test', () => {
   it('update where need error', () => {
     expect.assertions(1)
     try {
-      new Update('products').update({ rest: 1 }, { article: 'asdgasdgsadg' }).query()
+      new Update('products').update({ rest: 1, article: 'asdgasdgsadg' }).query()
     } catch (e) {
       expect(e).toEqual(new Error('where condition need'))
     }
@@ -56,7 +56,7 @@ describe('updert test', () => {
     })
 
     const upd = new Update('products')
-      .update({ rest: 1 }, { article: 'asdgasdgsadg' })
+      .update({ rest: 1, article: 'asdgasdgsadg' })
       .where({ id: 1 })
       .with('categories_product', (upd: Upd) => {
         return upd
