@@ -1,4 +1,4 @@
-import Insert from '../src/insert'
+import Insert from '../src/hasura-orm'
 
 describe('Insert test', () => {
   it('insert', () => {
@@ -40,13 +40,10 @@ describe('Insert test', () => {
         }
       ]
     }
-    const result = Object.keys(params).map(function(key: any) {
-      return { [key]: params[key] }
-    })
 
-    const ins = new Insert('products').insert(...result).insert(...result)
-    expect(ins).toBeInstanceOf(Insert)
+    const ins = new Insert('products').insert(params).insert(params)
+    expect(ins).toBeTruthy()
 
-    // console.log(ins.query());
+    console.log(ins.query())
   })
 })

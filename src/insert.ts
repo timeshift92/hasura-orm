@@ -1,39 +1,34 @@
-import Hasura from './hasura-orm'
+import Hasura from './hasura'
 import { stringify, hasRelation } from './helper'
 
-interface InserType {
-  [key: string]: any
-}
 export default class Insert extends Hasura {
   private _object: any = ''
   private _batch = false
-  constructor(_schema: string) {
-    super('insert_' + _schema)
+  constructor(_schema: string, provider: any = {}) {
+    super('insert_' + _schema, provider)
   }
 
-  insert(...args: any) {
-    if (!args[0].on_conflict || !args[0].objects) {
+  insert(args: any) {
+    if (!args.on_conflict || !args.objects) {
       this._batch = true
-      this._object += '{'
     }
 
-    args.forEach((value: any) => {
-      this._object += stringify(hasRelation(value))
-    })
+    this._object += stringify(hasRelation(args), !this._batch) + ' , '
 
-    if (!args[0].on_conflict || !args[0].objects) {
-      this._object += '}'
-    }
     return this
   }
 
-  parsed() {
-    this._schemaArguments += this._object
+  mutate() {
+    this.provider.mutate({ query: this.query() })
+  }
 
-    let schemaArgs = '(' + this._schemaArguments + ')'
+  parsed() {
+    let args = this.schemaArguments + this._object
+
+    let schemaArgs = '(' + args + ')'
 
     if (this._batch) {
-      schemaArgs = '(objects:[' + this._schemaArguments + '])'
+      schemaArgs = '(objects:[' + args + '])'
     }
     return ` ${this._schema} ${schemaArgs} {  ${
       this._fields ? ' returning { ' + this._fields + ' }' : 'affected_rows'

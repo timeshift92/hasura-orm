@@ -1,6 +1,6 @@
 {
   "name": "hasura-orm",
-  "version": "0.0.0-3",
+  "version": "0.0.8-4",
   "description": "",
   "keywords": [],
   "main": "dist/hasura-orm.umd.js",
@@ -31,10 +31,7 @@
     "commit": "git-cz",
     "semantic-release": "semantic-release",
     "semantic-release-prepare": "ts-node tools/semantic-release-prepare",
-    "precommit": "lint-staged",
-    "travis-deploy-once": "travis-deploy-once",
-    "prepush": "npm run test:prod && npm run build",
-    "commitmsg": "commitlint -E HUSKY_GIT_PARAMS"
+    "travis-deploy-once": "travis-deploy-once"
   },
   "lint-staged": {
     "{src,test}/**/*.ts": [
@@ -84,45 +81,49 @@
     ]
   },
   "devDependencies": {
-    "@commitlint/cli": "^7.1.2",
-    "@commitlint/config-conventional": "^7.1.2",
-    "@types/jest": "^23.3.2",
-    "@types/node": "^10.11.0",
-    "colors": "^1.3.2",
-    "commitizen": "^3.0.0",
-    "coveralls": "^3.0.2",
-    "cross-env": "^5.2.0",
-    "cz-conventional-changelog": "^2.1.0",
-    "husky": "^1.0.1",
-    "jest": "^23.6.0",
-    "jest-config": "^23.6.0",
-    "lint-staged": "^8.0.0",
+    "@commitlint/cli": "^8.2.0",
+    "@commitlint/config-conventional": "^8.2.0",
+    "@types/jest": "^24.0.25",
+    "@types/node": "^13.1.2",
+    "colors": "^1.4.0",
+    "commitizen": "^4.0.3",
+    "coveralls": "^3.0.9",
+    "cross-env": "^6.0.3",
+    "cz-conventional-changelog": "^3.0.2",
+    "husky": "^3.1.0",
+    "jest": "^24.9.0",
+    "jest-config": "^24.9.0",
+    "lint-staged": "^9.5.0",
     "lodash.camelcase": "^4.3.0",
-    "prettier": "^1.14.3",
+    "prettier": "^1.19.1",
     "prompt": "^1.0.0",
-    "replace-in-file": "^3.4.2",
+    "replace-in-file": "^5.0.2",
     "rimraf": "^2.6.2",
-    "rollup": "^0.67.0",
-    "rollup-plugin-commonjs": "^9.1.8",
-    "rollup-plugin-json": "^3.1.0",
-    "rollup-plugin-node-resolve": "^3.4.0",
+    "rollup": "^1.27.14",
+    "rollup-plugin-commonjs": "^10.1.0",
+    "rollup-plugin-json": "^4.0.0",
+    "rollup-plugin-node-resolve": "^5.2.0",
     "rollup-plugin-sourcemaps": "^0.4.2",
     "rollup-plugin-typescript2": "^0.25.3",
     "semantic-release": "^15.14.0",
     "shelljs": "^0.8.3",
-    "travis-deploy-once": "^5.0.9",
-    "ts-jest": "^23.10.2",
-    "ts-node": "^7.0.1",
-    "tslint": "^5.11.0",
-    "tslint-config-prettier": "^1.15.0",
-    "tslint-config-standard": "^8.0.1",
+    "travis-deploy-once": "^5.0.11",
+    "ts-jest": "^24.2.0",
+    "ts-node": "^8.5.4",
+    "tslint": "^5.20.1",
+    "tslint-config-prettier": "^1.18.0",
+    "tslint-config-standard": "^9.0.0",
     "typedoc": "^0.15.6",
-    "typescript": "^3.0.3"
+    "typescript": "^3.7.4"
   },
   "dependencies": {
-    "@types/stringify-object": "^3.2.0",
-    "core-js": "^3.6.1",
-    "hasura-orm": "^0.0.1",
-    "stringify-object": "^3.3.0"
+    "rollup-plugin-terser": "^5.1.3"
+  },
+  "husky": {
+    "hooks": {
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS",
+      "pre-commit": "lint-staged",
+      "pre-push": "npm run test:prod && npm run build"
+    }
   }
 }

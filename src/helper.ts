@@ -1,26 +1,24 @@
-import * as stringifyObject from 'stringify-object'
-const _stringify = stringifyObject
+export function stringify(object: any, trim = true): any {
+  let res = JSON.stringify(object)
+    .replace(/(\"order_by\":\{\"[\w]+\":)\"([^"]+)\"/g, '$1$2')
+    .replace(/((\"distinct_on\"|\"constraint\"):)\"([^"]+)\",/g, '$1$3,')
+    .replace(/\"([^"]+)\":/g, '$1:')
+  if (trim) {
+    res = res.replace(/\uFFFF/g, '\\"').replace(/^.|.$/g, '')
+  }
 
-export function stringify(object: any): any {
-  return _stringify(object, {
-    singleQuotes: false,
-    transform: (object: any, property: any, originalResult: any) => {
-      if (property === 'constraint') {
-        return originalResult.replace(/"/g, '')
-      }
-
-      return originalResult
-    }
-  }).replace(/^.|.$/g, '')
+  return res
 }
 
 export function hasRelation(value: any) {
-  if (typeof value[Object.keys(value)[0]] === 'object' && value.objects) {
-    return value
-  } else if (Array.isArray(value[Object.keys(value)[0]])) {
-    return {
-      [Object.keys(value)[0]]: { data: value[Object.keys(value)[0]] }
+  Object.keys(value).map((key: any) => {
+    if (typeof value[key] === 'object' && value.objects) {
+      return value
+    } else if (Array.isArray(value[key])) {
+      console.log(value)
+      value[key] = { data: value[key] }
     }
-  }
+    return value
+  })
   return value
 }

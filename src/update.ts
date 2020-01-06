@@ -1,27 +1,26 @@
-import Hasura from './hasura-orm'
+import Hasura from './hasura'
 import Insert from './insert'
-
+import { stringify } from './helper'
 interface UpdateType {
   [key: string]: any
 }
 export default class Update extends Hasura {
   private _set: any = ''
-  constructor(_schema: string) {
-    super('update_' + _schema)
+  constructor(_schema: string, provider: any = {}) {
+    super('update_' + _schema, provider)
   }
 
   update(...args: UpdateType[]) {
     args.forEach(value => {
-      this._set += ` ${Object.keys(value)[0]}:${
-        typeof value[Object.keys(value)[0]] === 'string'
-          ? '"' + value[Object.keys(value)[0]] + '"'
-          : value[Object.keys(value)[0]]
-      } `
+      this._set += stringify(value)
     })
 
     return this
   }
 
+  mutate() {
+    this.provider.mutate({ query: this.query() })
+  }
   with(schema: string, callback: (Update: Update) => Hasura) {
     let qr = callback(new Update(schema))
     this._compose += qr.parsed()
@@ -36,11 +35,11 @@ export default class Update extends Hasura {
   }
 
   parsed() {
-    if (!this._where) {
+    if (Object.keys(this._where).length === 0) {
       throw new Error('where condition need')
     }
-    this._schemaArguments += '_set: {' + this._set + '} '
-    return ` ${this._schema} ${'(' + this._schemaArguments + ' )'}{ ${
+    let args = this.schemaArguments + '_set: {' + this._set + '} '
+    return ` ${this._schema} ${'(' + args + ' )'}{ ${
       this._fields ? ' returning { ' + this._fields + ' }' : 'affected_rows'
     } }`
   }

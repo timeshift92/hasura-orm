@@ -1,7 +1,17 @@
-import Update from '../src/update'
+import Update from '../src/hasura-orm'
 import Insert from '../src/insert'
+import Upd from '../src/update'
 
 describe('updert test', () => {
+  it('update where need error', () => {
+    expect.assertions(1)
+    try {
+      new Update('products').update({ rest: 1 }, { article: 'asdgasdgsadg' }).query()
+    } catch (e) {
+      expect(e).toEqual(new Error('where condition need'))
+    }
+  })
+
   it('update', () => {
     let params: any = {
       product_locales: [
@@ -47,11 +57,11 @@ describe('updert test', () => {
 
     const upd = new Update('products')
       .update({ rest: 1 }, { article: 'asdgasdgsadg' })
-      .where('id', 1)
-      .with('categories_product', (upd: Update) => {
+      .where({ id: 1 })
+      .with('categories_product', (upd: Upd) => {
         return upd
           .update({ id: 1 })
-          .where('id', 1)
+          .where({ id: 1 })
           .select('id')
       })
       .insert('product_images', (ins: Insert) => {
@@ -69,8 +79,8 @@ describe('updert test', () => {
           ]
         })
       })
-    expect(upd).toBeInstanceOf(Update)
+    expect(upd).toBeInstanceOf(Upd)
 
-    console.log(upd.query())
+    // console.log(upd.query())
   })
 })
