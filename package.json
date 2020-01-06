@@ -1,8 +1,12 @@
 {
   "name": "hasura-orm",
-  "version": "0.0.8-4",
+  "version": "0.0.8-5",
   "description": "",
-  "keywords": [],
+  "keywords": [
+    "hasura",
+    "orm",
+    "graphql"
+  ],
   "main": "dist/hasura-orm.umd.js",
   "module": "dist/hasura-orm.es5.js",
   "typings": "dist/types/hasura-orm.d.ts",
@@ -31,7 +35,8 @@
     "commit": "git-cz",
     "semantic-release": "semantic-release",
     "semantic-release-prepare": "ts-node tools/semantic-release-prepare",
-    "travis-deploy-once": "travis-deploy-once"
+    "travis-deploy-once": "travis-deploy-once",
+    "prepublishOnly": "npm test"
   },
   "lint-staged": {
     "{src,test}/**/*.ts": [
