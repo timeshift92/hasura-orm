@@ -14,7 +14,7 @@ export default class Hasura {
   protected _paginate: any = ''
   protected _schema: string
   protected _where = {}
-  private _schemaArguments = {}
+  private _schemaArguments: any = {}
   protected _with = ''
   protected _compose = ''
   protected provider: any = {}
@@ -27,7 +27,7 @@ export default class Hasura {
   }
 
   select(fields: string) {
-    this._fields = ' ' + fields.replace(/,/g, ' ')
+    this._fields += ' ' + fields.replace(/,/g, ' ')
     return this
   }
 
@@ -92,13 +92,21 @@ export default class Hasura {
   }
 
   paginate(limit: number, offset: number) {
-    this.limit(limit)
-    this.offset(offset)
-    this._paginate = ` ${this._schema}_aggregate(${stringify(this._schemaArguments)}) {
+    delete this._schemaArguments['limit']
+    delete this._schemaArguments['offset']
+    let args = stringify(this._schemaArguments)
+    if (args) {
+      args = `(${stringify(this._schemaArguments)})`
+    }
+    this._paginate = ` ${this._schema}_aggregate${args} {
       aggregate {
         count
       }
     }`
+
+    this.limit(limit)
+    this.offset(offset)
+
     return this
   }
   query() {

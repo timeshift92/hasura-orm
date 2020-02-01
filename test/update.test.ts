@@ -90,7 +90,6 @@ describe('updert test', () => {
     let query = new Update('products', provider)
       .update({ rest: 1, article: 'asdgasdgsadg' })
       .where({ id: 1 })
-    console.log(query.mutate)
     expect(query.mutate()).toBeTruthy()
   })
 })
