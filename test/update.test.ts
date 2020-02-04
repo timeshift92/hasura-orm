@@ -52,6 +52,7 @@ describe('updert test', () => {
 
   it('update', () => {
     const upd = new Update('products')
+      .select('id name')
       .update({ rest: 1, article: 'asdgasdgsadg' })
       .where({ id: 1 })
       .with('categories_product', (upd: Upd) => {
@@ -75,6 +76,8 @@ describe('updert test', () => {
           ]
         })
       })
+
+    console.log(upd.query())
     expect(upd).toBeInstanceOf(Upd)
 
     // console.log(upd.query())

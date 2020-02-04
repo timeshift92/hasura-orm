@@ -40,7 +40,11 @@ export default class Update extends Hasura {
     }
     let args = this.schemaArguments + '_set: {' + this._set + '} '
     return ` ${this._schema} ${'(' + args + ' )'}{ ${
-      this._fields ? ' returning { ' + this._fields + ' }' : 'affected_rows'
+      this._fields
+        ? ' returning { ' + this._fields + this._with
+          ? this._with
+          : '' + ' }'
+        : 'affected_rows'
     } }`
   }
 
