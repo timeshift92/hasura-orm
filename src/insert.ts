@@ -30,12 +30,11 @@ export default class Insert extends Hasura {
     if (this._batch) {
       schemaArgs = '(objects:[' + args + '])'
     }
+    if (this._with) {
+      this._fields += ' ' + this._with
+    }
     return ` ${this._schema} ${schemaArgs} {  ${
-      this._fields
-        ? ' returning { ' + this._fields + this._with
-          ? this._with
-          : '' + ' }'
-        : 'affected_rows'
+      this._fields ? ' returning { ' + this._fields + ' }' : 'affected_rows'
     } }`
   }
 

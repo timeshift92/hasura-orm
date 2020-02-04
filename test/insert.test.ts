@@ -41,7 +41,14 @@ describe('Insert test', () => {
   }
 
   it('insert', () => {
-    const ins = new Insert('products').insert(params).insert(params)
+    const ins = new Insert('products')
+      .insert(params)
+      .insert(params)
+      .select('name id')
+      .with('test', query => {
+        return query.select('id')
+      })
+    console.log(ins.query())
     expect(ins).toBeTruthy()
 
     // console.log(ins.query())

@@ -77,7 +77,6 @@ describe('updert test', () => {
         })
       })
 
-    console.log(upd.query())
     expect(upd).toBeInstanceOf(Upd)
 
     // console.log(upd.query())
