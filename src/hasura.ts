@@ -1,4 +1,5 @@
 import { stringify } from './helper'
+import HasuraORM from './hasura-orm'
 
 interface OrderBy {
   [key: string]:
@@ -53,8 +54,8 @@ export default class Hasura {
     this.addArg('order_by', orderBy)
     return this
   }
-  compose(schema: string, callback: (Hasura: Hasura) => Hasura) {
-    let qr = callback(new Hasura(schema))
+  compose(schema: string, callback: (Hasura: HasuraORM) => Hasura) {
+    let qr = callback(new HasuraORM(schema))
     this._compose += qr.parsed()
 
     return this
