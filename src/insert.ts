@@ -28,7 +28,7 @@ export default class Insert extends Hasura {
     let schemaArgs = '(' + args + ')'
 
     if (this._batch) {
-      schemaArgs = '(objects:[' + args + '])'
+      schemaArgs = args[0] === '[' ? '(objects:' + args + ')' : '(objects:[' + args + '])'
     }
     if (this._with) {
       this._fields += ' ' + this._with

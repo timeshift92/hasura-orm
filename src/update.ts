@@ -48,6 +48,6 @@ export default class Update extends Hasura {
   }
 
   query() {
-    return `mutation { ${this.parsed()} ${this._compose} } `
+    return `mutation { ${this._compose}  ${this.parsed()} } `
   }
 }
