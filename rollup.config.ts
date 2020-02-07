@@ -6,7 +6,7 @@ import typescript from 'rollup-plugin-typescript2'
 import json from 'rollup-plugin-json'
 import { terser } from 'rollup-plugin-terser';
 const pkg = require('./package.json')
-
+import analyze from 'rollup-plugin-analyzer'
 const libraryName = 'hasura-orm'
 
 export default {
@@ -33,6 +33,7 @@ export default {
     resolve(),
     // Resolve source maps to the original source
     sourceMaps(),
-    // terser()
+    analyze(),
+    terser()
   ],
 }

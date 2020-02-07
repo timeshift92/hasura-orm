@@ -1,6 +1,7 @@
 import Update from '../src/hasura-orm'
 import Insert from '../src/insert'
 import Upd from '../src/update'
+import { lstat } from 'fs'
 
 describe('updert test', () => {
   let params: any = {
@@ -53,9 +54,12 @@ describe('updert test', () => {
   it('update', () => {
     const upd = new Update('products')
       .select('id name')
+      .with('product_locales', lc => {
+        return lc.select('description  name locales_id')
+      })
       .update({ rest: 1, article: 'asdgasdgsadg' })
       .where({ id: 1 })
-      .with('categories_product', (upd: Upd) => {
+      .compose('categories_product', upd => {
         return upd
           .update({ id: 1 })
           .where({ id: 1 })
@@ -79,7 +83,7 @@ describe('updert test', () => {
 
     expect(upd).toBeInstanceOf(Upd)
 
-    // console.log(upd.query())
+    console.log(upd.query())
   })
 
   it('check provider', () => {

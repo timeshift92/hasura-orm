@@ -21,11 +21,6 @@ export default class Update extends Hasura {
   mutate() {
     return this.provider.mutate({ query: this.query() })
   }
-  with(schema: string, callback: (Update: Update) => Hasura) {
-    let qr = callback(new Update(schema))
-    this._compose += qr.parsed()
-    return this
-  }
 
   insert(schema: string, callback: (Insert: Insert) => Hasura) {
     let qr = callback(new Insert(schema))

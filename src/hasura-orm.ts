@@ -17,13 +17,13 @@ export default class HasuraORM extends Hasura {
     super(schema, provider)
   }
   insert(args: any): Insert {
-    return new Insert(this._schema, this.provider).insert(args)
+    return Object.assign(new Insert(this._schema, this.provider).insert(args), this)
   }
   update(args: any): Update {
-    return new Update(this._schema, this.provider).update(args)
+    return Object.assign(new Update(this._schema, this.provider).update(args), this)
   }
 
   delete(args: any): Delete {
-    return new Delete(this._schema, this.provider).delete(args)
+    return Object.assign(new Delete(this._schema, this.provider).delete(args), this)
   }
 }
