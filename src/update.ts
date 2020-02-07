@@ -6,8 +6,14 @@ interface UpdateType {
 }
 export default class Update extends Hasura {
   private _set: any = ''
-  constructor(_schema: string, provider: any = {}) {
-    super('update_' + _schema, provider)
+  constructor(
+    _schema: string,
+    provider: any = {},
+    _with: string,
+    _fields: string,
+    _schemaArguments: {}
+  ) {
+    super('update_' + _schema, provider, _with, _fields, _schemaArguments)
   }
 
   update(...args: UpdateType[]) {
@@ -23,7 +29,9 @@ export default class Update extends Hasura {
   }
 
   insert(schema: string, callback: (Insert: Insert) => Hasura) {
-    let qr = callback(new Insert(schema))
+    let qr = callback(
+      new Insert(schema, this.provider, this._with, this._fields, this.schemaArguments)
+    )
     this._compose += qr.parsed()
 
     return this
@@ -34,11 +42,9 @@ export default class Update extends Hasura {
       throw new Error('where condition need')
     }
     let args = this.schemaArguments + '_set: {' + this._set + '} '
-    if (this._with) {
-      this._fields += ' ' + this._with
-    }
+
     return ` ${this._schema} ${'(' + args + ' )'}{ ${
-      this._fields ? ' returning { ' + this._fields + ' }' : 'affected_rows'
+      this._fields ? ' returning { ' + this.getFields() + ' }' : 'affected_rows'
     } }`
   }
 

@@ -15,13 +15,22 @@ export default class Hasura {
   protected _paginate: any = ''
   protected _schema: string
   protected _where = {}
-  private _schemaArguments: any = {}
+  protected _schemaArguments: any = {}
   protected _with = ''
   protected _compose = ''
   protected provider: any = {}
-  constructor(schema: string, provider: any = {}) {
+  constructor(
+    schema: string,
+    provider: any = {},
+    _with: string,
+    _fields: string,
+    _schemaArguments: {}
+  ) {
     this.provider = provider
     this._schema = schema
+    this._with = _with
+    this._fields = _fields
+    this._schemaArguments = _schemaArguments
   }
   public get schemaArguments(): string {
     return stringify(this._schemaArguments)
@@ -55,7 +64,9 @@ export default class Hasura {
     return this
   }
   compose(schema: string, callback: (Hasura: HasuraORM) => Hasura) {
-    let qr = callback(new HasuraORM(schema))
+    let qr = callback(
+      new HasuraORM(schema, this.provider, this._with, this._fields, this._schemaArguments)
+    )
     this._compose += qr.parsed()
 
     return this
@@ -75,7 +86,9 @@ export default class Hasura {
   }
 
   with(schema: string, callback: (Hasura: Hasura) => Hasura) {
-    let qr = callback(new Hasura(schema))
+    let qr = callback(
+      new Hasura(schema, this.provider, this._with, this._fields, this._schemaArguments)
+    )
 
     this._with += qr.parsed()
 
@@ -89,7 +102,11 @@ export default class Hasura {
       Object.keys(this._schemaArguments).length > 0
         ? '(' + stringify(this._schemaArguments) + ')'
         : ''
-    }{  ${this._fields} ${this._with} }`
+    }{  ${this.getFields()} }`
+  }
+
+  getFields() {
+    return `${this._fields} ${this._with}`
   }
 
   paginate(limit: number, offset: number) {

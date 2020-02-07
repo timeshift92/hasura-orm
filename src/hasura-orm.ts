@@ -13,17 +13,42 @@ interface OrderBy {
     | 'desc_nulls_last'
 }
 export default class HasuraORM extends Hasura {
-  constructor(schema: string, provider: any = {}) {
-    super(schema, provider)
+  constructor(
+    _schema: string,
+    provider: any = {},
+    _with: string = '',
+    _fields: string = '',
+    _schemaArguments = {}
+  ) {
+    super(_schema, provider, _with, _fields, _schemaArguments)
   }
   insert(args: any): Insert {
-    return Object.assign(new Insert(this._schema, this.provider).insert(args), this)
+    return new Insert(
+      this._schema,
+      this.provider,
+      this._with,
+      this._fields,
+      this._schemaArguments
+    ).insert(args)
   }
   update(args: any): Update {
-    return Object.assign(new Update(this._schema, this.provider).update(args), this)
+    console.log(this)
+    return new Update(
+      this._schema,
+      this.provider,
+      this._with,
+      this._fields,
+      this._schemaArguments
+    ).update(args)
   }
 
   delete(args: any): Delete {
-    return Object.assign(new Delete(this._schema, this.provider).delete(args), this)
+    return new Delete(
+      this._schema,
+      this.provider,
+      this._with,
+      this._fields,
+      this._schemaArguments
+    ).delete(args)
   }
 }
