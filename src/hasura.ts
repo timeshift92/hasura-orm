@@ -22,9 +22,9 @@ export default class Hasura {
   constructor(
     schema: string,
     provider: any = {},
-    _with: string,
-    _fields: string,
-    _schemaArguments: {}
+    _with: string = '',
+    _fields: string = '',
+    _schemaArguments = {}
   ) {
     this.provider = provider
     this._schema = schema
@@ -64,9 +64,7 @@ export default class Hasura {
     return this
   }
   compose(schema: string, callback: (Hasura: HasuraORM) => Hasura) {
-    let qr = callback(
-      new HasuraORM(schema, this.provider, this._with, this._fields, this._schemaArguments)
-    )
+    let qr = callback(new HasuraORM(schema, this.provider))
     this._compose += qr.parsed()
 
     return this
@@ -86,9 +84,7 @@ export default class Hasura {
   }
 
   with(schema: string, callback: (Hasura: Hasura) => Hasura) {
-    let qr = callback(
-      new Hasura(schema, this.provider, this._with, this._fields, this._schemaArguments)
-    )
+    let qr = callback(new Hasura(schema, this.provider))
 
     this._with += qr.parsed()
 

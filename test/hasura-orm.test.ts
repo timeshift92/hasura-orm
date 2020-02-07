@@ -10,7 +10,7 @@ describe('Query test', () => {
   })
 
   it('Query is instantiable', () => {
-    expect(new Query('products')).toBeInstanceOf(Hasura)
+    expect(new Query('products', null, '', '', {})).toBeInstanceOf(Hasura)
   })
 
   it('Query select', () => {

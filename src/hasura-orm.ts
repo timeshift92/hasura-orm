@@ -32,7 +32,6 @@ export default class HasuraORM extends Hasura {
     ).insert(args)
   }
   update(args: any): Update {
-    console.log(this)
     return new Update(
       this._schema,
       this.provider,

@@ -29,9 +29,7 @@ export default class Update extends Hasura {
   }
 
   insert(schema: string, callback: (Insert: Insert) => Hasura) {
-    let qr = callback(
-      new Insert(schema, this.provider, this._with, this._fields, this.schemaArguments)
-    )
+    let qr = callback(new Insert(schema, this.provider))
     this._compose += qr.parsed()
 
     return this

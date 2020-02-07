@@ -7,9 +7,9 @@ export default class Insert extends Hasura {
   constructor(
     _schema: string,
     provider: any = {},
-    _with: string,
-    _fields: string,
-    _schemaArguments: {}
+    _with: string = '',
+    _fields: string = '',
+    _schemaArguments = {}
   ) {
     super('insert_' + _schema, provider, _with, _fields, _schemaArguments)
   }
