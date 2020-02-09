@@ -126,18 +126,18 @@ export default class Hasura {
   query() {
     return `query {  ${this.parsed()} ${this._compose} }`
   }
-  subscription() {
+  subscriptionQuery() {
     return `subscription {  ${this.parsed()} ${this._compose} }`
   }
 
-  get() {
-    return this.provider.get({ query: this.query() })
+  get(cache = true) {
+    return this.provider.get({ query: this.query() }, cache)
   }
-  await() {
-    return this.provider.query({ query: this.query() })
+  await(cache = true) {
+    return this.provider.query({ query: this.query() }, (cache = true))
   }
 
-  subscribe() {
-    return this.provider.subscribe({ query: this.subscription() })
+  subscription() {
+    return this.provider.subscription({ query: this.subscriptionQuery() })
   }
 }
