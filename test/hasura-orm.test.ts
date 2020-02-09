@@ -43,7 +43,7 @@ describe('Query test', () => {
 
     // console.log(query)
     expect(query.query()).toBeTruthy()
-    expect(query.subscription()).toBeTruthy()
+    expect(query.subscriptionQuery()).toBeTruthy()
   })
 
   it('check provider', () => {
@@ -54,7 +54,7 @@ describe('Query test', () => {
       query: ({ query }: any) => {
         return query
       },
-      subscribe: ({ query }: any) => {
+      subscription: ({ query }: any) => {
         return query
       },
       mutate: ({ query }: any) => {
@@ -80,7 +80,8 @@ describe('Query test', () => {
       .paginate(5, 0)
       .paginate(5, 0)
     expect(query.get()).toBeTruthy()
+    expect(query.get(false)).toBeTruthy()
     expect(query.await()).toBeTruthy()
-    expect(query.subscribe()).toBeTruthy()
+    expect(query.subscription()).toBeTruthy()
   })
 })
