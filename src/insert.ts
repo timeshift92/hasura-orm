@@ -9,9 +9,10 @@ export default class Insert extends Hasura {
     provider: any = {},
     _with: string = '',
     _fields: string = '',
-    _schemaArguments = {}
+    _schemaArguments = {},
+    _alias = ''
   ) {
-    super('insert_' + _schema, provider, _with, _fields, _schemaArguments)
+    super('insert_' + _schema, provider, _with, _fields, _schemaArguments, _alias)
   }
 
   insert(args: any) {
@@ -37,7 +38,7 @@ export default class Insert extends Hasura {
       schemaArgs = args[0] === '[' ? '(objects:' + args + ')' : '(objects:[' + args + '])'
     }
 
-    return ` ${this._schema} ${schemaArgs} {  ${
+    return ` ${this._alias}${this._schema} ${schemaArgs} {  ${
       this._fields ? ' returning { ' + this.getFields() + ' }' : 'affected_rows'
     } }`
   }

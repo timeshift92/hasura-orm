@@ -14,7 +14,7 @@ describe('delete test', () => {
     let query = new Delete('products', provider).select('id').delete({ rest: 1 })
     let query2 = new Delete('products', provider).delete({ rest: 1 })
 
-    expect(query.query()).toBeTruthy()
+    expect(query.alias('asdwq2').query()).toBeTruthy()
     expect(query2.mutate()).toBeTruthy()
   })
 })

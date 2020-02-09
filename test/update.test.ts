@@ -45,7 +45,9 @@ describe('updert test', () => {
   it('update where need error', () => {
     expect.assertions(1)
     try {
-      new Update('products').update({ rest: 1, article: 'asdgasdgsadg' }).query()
+      new Update('products', '', '', '', {}, '')
+        .update({ rest: 1, article: 'asdgasdgsadg' })
+        .query()
     } catch (e) {
       expect(e).toEqual(new Error('where condition need'))
     }
@@ -53,6 +55,7 @@ describe('updert test', () => {
 
   it('update', () => {
     const upd = new Update('products')
+      .alias('test')
       .select('id name')
       .with('product_locales', lc => {
         return lc.select('description  name locales_id')
@@ -83,7 +86,7 @@ describe('updert test', () => {
 
     expect(upd).toBeInstanceOf(Upd)
 
-    console.log(upd.query())
+    // console.log(upd.query())
   })
 
   it('check provider', () => {

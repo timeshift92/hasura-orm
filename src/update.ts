@@ -11,9 +11,10 @@ export default class Update extends Hasura {
     provider: any = {},
     _with: string,
     _fields: string,
-    _schemaArguments: {}
+    _schemaArguments: {},
+    _alias = ''
   ) {
-    super('update_' + _schema, provider, _with, _fields, _schemaArguments)
+    super('update_' + _schema, provider, _with, _fields, _schemaArguments, _alias)
   }
 
   update(...args: UpdateType[]) {
@@ -41,7 +42,7 @@ export default class Update extends Hasura {
     }
     let args = this.schemaArguments + '_set: {' + this._set + '} '
 
-    return ` ${this._schema} ${'(' + args + ' )'}{ ${
+    return ` ${this._alias}${this._schema} ${'(' + args + ' )'}{ ${
       this._fields ? ' returning { ' + this.getFields() + ' }' : 'affected_rows'
     } }`
   }

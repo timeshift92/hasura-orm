@@ -3,24 +3,16 @@ import Insert from './insert'
 import Hasura from './hasura'
 import Delete from './delete'
 
-interface OrderBy {
-  [key: string]:
-    | 'asc'
-    | 'asc_nulls_first'
-    | 'asc_nulls_last'
-    | 'desc'
-    | 'desc_nulls_first'
-    | 'desc_nulls_last'
-}
 export default class HasuraORM extends Hasura {
   constructor(
     _schema: string,
     provider: any = {},
     _with: string = '',
     _fields: string = '',
-    _schemaArguments = {}
+    _schemaArguments = {},
+    _alias = ''
   ) {
-    super(_schema, provider, _with, _fields, _schemaArguments)
+    super(_schema, provider, _with, _fields, _schemaArguments, _alias)
   }
   insert(args: any): Insert {
     return new Insert(
@@ -28,7 +20,8 @@ export default class HasuraORM extends Hasura {
       this.provider,
       this._with,
       this._fields,
-      this._schemaArguments
+      this._schemaArguments,
+      this._alias
     ).insert(args)
   }
   update(args: any): Update {
@@ -37,7 +30,8 @@ export default class HasuraORM extends Hasura {
       this.provider,
       this._with,
       this._fields,
-      this._schemaArguments
+      this._schemaArguments,
+      this._alias
     ).update(args)
   }
 
@@ -47,7 +41,8 @@ export default class HasuraORM extends Hasura {
       this.provider,
       this._with,
       this._fields,
-      this._schemaArguments
+      this._schemaArguments,
+      this._alias
     ).delete(args)
   }
 }

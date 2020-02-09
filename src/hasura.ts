@@ -13,6 +13,7 @@ interface OrderBy {
 export default class Hasura {
   protected _fields: string = ''
   protected _paginate: any = ''
+  protected _alias: string = ''
   protected _schema: string
   protected _where = {}
   protected _schemaArguments: any = {}
@@ -24,13 +25,15 @@ export default class Hasura {
     provider: any = {},
     _with: string = '',
     _fields: string = '',
-    _schemaArguments = {}
+    _schemaArguments = {},
+    _alias = ''
   ) {
     this.provider = provider
     this._schema = schema
     this._with = _with
     this._fields = _fields
     this._schemaArguments = _schemaArguments
+    this._alias = _alias
   }
   public get schemaArguments(): string {
     return stringify(this._schemaArguments)
@@ -38,6 +41,10 @@ export default class Hasura {
 
   select(fields: string) {
     this._fields += ' ' + fields.replace(/,/g, ' ')
+    return this
+  }
+  alias(alias: string) {
+    this._alias = `${alias}:`
     return this
   }
 
@@ -59,7 +66,7 @@ export default class Hasura {
     return this
   }
 
-  orderBy(orderBy: any): Hasura {
+  orderBy(orderBy: OrderBy | any): Hasura {
     this.addArg('order_by', orderBy)
     return this
   }
@@ -94,7 +101,7 @@ export default class Hasura {
     if (!this._fields) {
       this._fields = 'id'
     }
-    return `${this._paginate} ${this._schema} ${
+    return `${this._paginate} ${this._alias}${this._schema} ${
       Object.keys(this._schemaArguments).length > 0
         ? '(' + stringify(this._schemaArguments) + ')'
         : ''

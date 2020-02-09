@@ -6,9 +6,10 @@ export default class Delete extends Hasura {
     provider: any = {},
     _with: string,
     _fields: string,
-    _schemaArguments: {}
+    _schemaArguments: {},
+    _alias = ''
   ) {
-    super('delete_' + _schema, provider, _with, _fields, _schemaArguments)
+    super('delete_' + _schema, provider, _with, _fields, _schemaArguments, _alias)
   }
 
   delete(condition: any) {
@@ -16,7 +17,7 @@ export default class Delete extends Hasura {
   }
 
   parsed() {
-    return ` ${this._schema} ${'(' + this.schemaArguments + ' )'}{ ${
+    return ` ${this._alias}${this._schema} ${'(' + this.schemaArguments + ' )'}{ ${
       this._fields ? ' returning { ' + this._fields + ' }' : 'affected_rows'
     } }`
   }

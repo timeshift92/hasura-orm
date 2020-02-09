@@ -13,6 +13,15 @@ describe('Query test', () => {
     expect(new Query('products', null, '', '', {})).toBeInstanceOf(Hasura)
   })
 
+  it('Query is instantiable', () => {
+    expect(
+      new Query('products', null, '', '', {})
+        .where({ id: 5 })
+        .paginate(5, 5)
+        .query()
+    ).toBeTruthy()
+  })
+
   it('Query select', () => {
     expect(new Query('products').select('1,2,3')).toBeInstanceOf(Hasura)
     expect(new Query('products').select('1,2,3').parsed()).toBeTruthy()
@@ -62,6 +71,7 @@ describe('Query test', () => {
       }
     }
     let query = new Query('products', provider)
+      .alias('tasd')
       .where({ id: 1, product_locales: { name: { _ilike: 'test' } } })
       .with('product_locales', query => {
         return query.select('name').where({ locales_id: 1 })

@@ -42,14 +42,32 @@ describe('Insert test', () => {
 
   it('insert', () => {
     const ins = new Insert('products')
+      .alias('asd')
       .insert(params)
       .insert(params)
       .select('name id')
       .with('test', query => {
         return query.select('id')
       })
-    console.log(ins.query())
-    expect(ins).toBeTruthy()
+    // console.log(ins.query())
+    expect(ins.query()).toBeTruthy()
+
+    // console.log(ins.query())
+  })
+  it('insert', () => {
+    const ins = new Insert('products')
+
+      .insert([
+        { a: 1, b: 2 },
+        { a: 23, b: 5 }
+      ])
+      .insert({ a: 1, f: 2 })
+      .select('name id')
+      .with('test', query => {
+        return query.select('id')
+      })
+    // console.log(ins.query())
+    expect(ins.query()).toBeTruthy()
 
     // console.log(ins.query())
   })
