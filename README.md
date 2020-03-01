@@ -1,17 +1,19 @@
 # Hasura-orm
-I think in normal cases, everyone will just copy queries from graphiql
-but this library is needed to create programmatically generated queries, do not judge strictly =)
 
-# setup
-```
+I think in normal cases, everyone just copies queries from graphiql.
+But this library creates programmatically generated queries, do not judge strictly =)
+
+## setup
+
+```bash
 npm i hasura-orm
 yarn add hasura-orm
 ```
-# how-to use
 
-```
+## how-to use
+
+```ts
 import Hasura from 'hasura-orm';
-
 import { GraphQLProvider, reportCacheErrors } from "graphql-svelte";
 
 let accessToken;
@@ -19,7 +21,6 @@ let accessToken;
 function getToken() {
 	return accessToken ? `Bearer ${accessToken}` : ''
 }
-
 
 let client = GraphQLProvider({
 	url: 'http://localhost:8082/v1/graphql',
@@ -32,15 +33,20 @@ let client = GraphQLProvider({
 		url: 'wss://go.pyrex.uz/v1/graphql'
 	}
 })
+
 client.graphql.on('cache', reportCacheErrors)
 
-export function hasura(schema) {
+export default function hasura(schema) {
 	Hasura.provider = client;
 	const orm = new Hasura(schema)
 	orm.provider = client;
 	return orm;
 }
--------------------------- other file -------------------------
+```
+
+```ts
+import hasura from 'your/path/to/hasura'
+
 const query = hasura('products')
       .where({ 'id': 1, 'product_locales': { "name": { "_ilike": "test" } } })
       .with('product_locales', query => {
@@ -60,12 +66,11 @@ const query = hasura('products')
       .paginate(5, 0)
       .paginate(5, 0)
       .query()
-
 ```
 
-!!! note the provider can be anything but I use my own as an example
+!!! note the provider can be anything but I use my own as an example.
 
-# api 
+## api 
 
-api is in the docs folder, and so you can always see the source
+api is in the docs folder, and so you can always see the source.
 
