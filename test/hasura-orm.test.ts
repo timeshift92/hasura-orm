@@ -10,12 +10,24 @@ describe('Query test', () => {
   })
 
   it('Query is instantiable', () => {
-    expect(new Query('products', null, '', '', {})).toBeInstanceOf(Hasura)
+    expect(new Query({ _schema: 'products' })).toBeInstanceOf(Hasura)
   })
 
   it('Query is instantiable', () => {
     expect(
-      new Query('products', null, '', '', {})
+      new Query({
+        _alias: 'ali',
+        _schema: 'products',
+        _with: 'test',
+        _fields: 'asd,asd',
+        _schemaArguments: { a: 1, b: 1 }
+      })
+    ).toBeInstanceOf(Hasura)
+  })
+
+  it('Query is instantiable', () => {
+    expect(
+      new Query({ _schema: 'products' })
         .where({ id: 5 })
         .paginate(5, 5)
         .query()
@@ -23,15 +35,15 @@ describe('Query test', () => {
   })
 
   it('Query select', () => {
-    expect(new Query('products').select('1,2,3')).toBeInstanceOf(Hasura)
-    expect(new Query('products').select('1,2,3').parsed()).toBeTruthy()
+    expect(new Query({ _schema: 'products' }).select('1,2,3')).toBeInstanceOf(Hasura)
+    expect(new Query({ _schema: 'products' }).select('1,2,3').parsed()).toBeTruthy()
     expect(
-      new Query('products')
+      new Query({ _schema: 'products' })
         .select('1,2,3')
         .where({ id: { _in: [1, 2, 3] } })
         .parsed()
     ).toBeTruthy()
-    const query = new Query('products')
+    const query = new Query({ _schema: 'products' })
       .where({ id: 1, product_locales: { name: { _ilike: 'test' } } })
       .with('product_locales', query => {
         return query.select('name').where({ locales_id: 1 })
@@ -70,7 +82,7 @@ describe('Query test', () => {
         return query
       }
     }
-    let query = new Query('products', provider)
+    let query = new Query({ _schema: 'products', provider })
       .alias('tasd')
       .where({ id: 1, product_locales: { name: { _ilike: 'test' } } })
       .with('product_locales', query => {

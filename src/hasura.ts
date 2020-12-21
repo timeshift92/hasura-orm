@@ -1,5 +1,6 @@
 import { stringify } from './helper'
 import HasuraORM from './hasura-orm'
+import { MainContructor } from './intefaces'
 
 interface OrderBy {
   [key: string]:
@@ -20,16 +21,16 @@ export default class Hasura {
   protected _with = ''
   protected _compose = ''
   protected provider: any = {}
-  constructor(
-    schema: string,
-    provider: any = {},
-    _with: string = '',
-    _fields: string = '',
+  constructor({
+    _schema,
+    provider = {},
+    _with = '',
+    _fields = '',
     _schemaArguments = {},
     _alias = ''
-  ) {
+  }: MainContructor) {
     this.provider = provider
-    this._schema = schema
+    this._schema = _schema
     this._with = _with
     this._fields = _fields
     this._schemaArguments = _schemaArguments
@@ -71,7 +72,7 @@ export default class Hasura {
     return this
   }
   compose(schema: string, callback: (Hasura: HasuraORM) => Hasura) {
-    let qr = callback(new HasuraORM(schema, this.provider))
+    let qr = callback(new HasuraORM({ _schema: schema, provider: this.provider }))
     this._compose += qr.parsed()
 
     return this
@@ -91,7 +92,7 @@ export default class Hasura {
   }
 
   with(schema: string, callback: (Hasura: Hasura) => Hasura) {
-    let qr = callback(new Hasura(schema, this.provider))
+    let qr = callback(new Hasura({ _schema: schema, provider: this.provider }))
 
     this._with += qr.parsed()
 

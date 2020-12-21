@@ -41,7 +41,7 @@ describe('Insert test', () => {
   }
 
   it('insert', () => {
-    const ins = new Insert('products')
+    const ins = new Insert({ _schema: 'products' })
       .alias('asd')
       .insert(params)
       .insert(params)
@@ -55,7 +55,25 @@ describe('Insert test', () => {
     // console.log(ins.query())
   })
   it('insert', () => {
-    const ins = new Insert('products')
+    const ins = new Insert({ _schema: 'products' })
+
+      .insert([
+        { a: 1, b: 2 },
+        { a: 23, b: 5 }
+      ])
+      .insert({ a: 1, f: 2 })
+      .select('name id')
+      .with('test', query => {
+        return query.select('id')
+      })
+    // console.log(ins.query())
+    expect(ins.query()).toBeTruthy()
+
+    // console.log(ins.query())
+  })
+
+  it('insert with custom schema', () => {
+    const ins = new Insert({ _schema: 'products' })
 
       .insert([
         { a: 1, b: 2 },
@@ -78,7 +96,7 @@ describe('Insert test', () => {
         return query
       }
     }
-    let query = new Insert('products', provider).insert(params)
+    let query = new Insert({ _schema: 'products', provider }).insert(params)
     expect(query.mutate()).toBeTruthy()
   })
 })

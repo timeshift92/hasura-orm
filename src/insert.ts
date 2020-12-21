@@ -1,18 +1,20 @@
 import Hasura from './hasura'
 import { stringify, hasRelation } from './helper'
+import { Contructor } from './intefaces'
 
 export default class Insert extends Hasura {
   private _object: any = ''
   private _batch = false
-  constructor(
-    _schema: string,
-    provider: any = {},
-    _with: string = '',
-    _fields: string = '',
+  constructor({
+    _prefix = 'insert_',
+    _schema,
+    provider = {},
+    _with = '',
+    _fields = '',
     _schemaArguments = {},
     _alias = ''
-  ) {
-    super('insert_' + _schema, provider, _with, _fields, _schemaArguments, _alias)
+  }: Contructor) {
+    super({ _schema: _prefix + _schema, provider, _with, _fields, _schemaArguments, _alias })
   }
 
   insert(args: any) {

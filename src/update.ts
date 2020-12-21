@@ -1,20 +1,22 @@
 import Hasura from './hasura'
 import Insert from './insert'
 import { stringify } from './helper'
+import { Contructor } from './intefaces'
 interface UpdateType {
   [key: string]: any
 }
 export default class Update extends Hasura {
   private _set: any = ''
-  constructor(
-    _schema: string,
-    provider: any = {},
-    _with: string,
-    _fields: string,
-    _schemaArguments: {},
-    _alias = ''
-  ) {
-    super('update_' + _schema, provider, _with, _fields, _schemaArguments, _alias)
+  constructor({
+    _prefix,
+    _schema,
+    provider,
+    _with,
+    _fields,
+    _schemaArguments,
+    _alias
+  }: Contructor) {
+    super({ _schema: _prefix + _schema, provider, _with, _fields, _schemaArguments, _alias })
   }
 
   update(...args: UpdateType[]) {
@@ -30,7 +32,7 @@ export default class Update extends Hasura {
   }
 
   insert(schema: string, callback: (Insert: Insert) => Hasura) {
-    let qr = callback(new Insert(schema, this.provider))
+    let qr = callback(new Insert({ _schema: schema, provider: this.provider }))
     this._compose += qr.parsed()
 
     return this

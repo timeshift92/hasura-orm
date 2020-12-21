@@ -42,19 +42,37 @@ describe('updert test', () => {
       }
     ]
   }
-  it('update where need error', () => {
+  it('with custom query', () => {
+    expect(
+      new Upd({ _prefix: 'test', _schema: 'asd', provider: {}, _schemaArguments: {}, _alias: 'as' })
+        .where({ id: 1 })
+        .update({ rest: 1, article: 'asdgasdgsadg' })
+        .query()
+    ).toBeTruthy()
+  })
+
+  it('update with custom schema where need error', () => {
     expect.assertions(1)
     try {
-      new Update('products', '', '', '', {}, '')
-        .update({ rest: 1, article: 'asdgasdgsadg' })
+      new Update({ _schema: 'products' })
+        .update({ rest: 1, article: 'asdgasdgsadg' }, 'test')
         .query()
     } catch (e) {
       expect(e).toEqual(new Error('where condition need'))
     }
   })
 
+  it('update where need error', () => {
+    expect.assertions(1)
+    try {
+      new Update({ _schema: 'products' }).update({ rest: 1, article: 'asdgasdgsadg' }).query()
+    } catch (e) {
+      expect(e).toEqual(new Error('where condition need'))
+    }
+  })
+
   it('update', () => {
-    const upd = new Update('products')
+    const upd = new Update({ _schema: 'products' })
       .alias('test')
       .select('id name')
       .with('product_locales', lc => {
@@ -96,7 +114,7 @@ describe('updert test', () => {
       }
     }
 
-    let query = new Update('products', provider)
+    let query = new Update({ _schema: 'products', provider })
       .update({ rest: 1, article: 'asdgasdgsadg' })
       .where({ id: 1 })
     expect(query.mutate()).toBeTruthy()
