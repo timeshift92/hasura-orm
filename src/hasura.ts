@@ -138,14 +138,19 @@ export default class Hasura {
     return `subscription {  ${this.parsed()} ${this._compose} }`
   }
 
-  get(cache = true) {
-    return this.provider.get({ query: this.query() }, cache)
-  }
-  await(cache = true) {
-    return this.provider.query({ query: this.query() }, (cache = true))
+  get<T>(cache = true): Promise<T> {
+    return this.provider.query({ query: this.query(), cache })
   }
 
-  subscription() {
+  subscription(): {
+    subscribe(
+      observerOrNext?: any,
+      onError?: any,
+      onComplete?: any
+    ): {
+      unsubscribe: () => void
+    }
+  } {
     return this.provider.subscription({ query: this.subscriptionQuery() })
   }
 }

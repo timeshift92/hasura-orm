@@ -103,7 +103,7 @@ describe('Query test', () => {
       .paginate(5, 0)
     expect(query.get()).toBeTruthy()
     expect(query.get(false)).toBeTruthy()
-    expect(query.await()).toBeTruthy()
+
     expect(query.subscription()).toBeTruthy()
   })
 })

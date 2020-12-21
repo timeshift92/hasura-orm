@@ -23,7 +23,7 @@ export default class Delete extends Hasura {
       this._fields ? ' returning { ' + this._fields + ' }' : 'affected_rows'
     } }`
   }
-  mutate() {
+  mutate<T>(): Promise<T> {
     return this.provider.mutate({ query: this.query() })
   }
 

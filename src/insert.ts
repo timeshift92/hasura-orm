@@ -27,7 +27,7 @@ export default class Insert extends Hasura {
     return this
   }
 
-  mutate() {
+  mutate<T>(): Promise<T> {
     return this.provider.mutate({ query: this.query() })
   }
 
