@@ -45,7 +45,7 @@ export default class Update extends Hasura {
         this._argVariables += `$${key}:` + this._schema.replace(this._prefix, '') + key + '_input '
         this._variables = { ...this._variables, [key]: value[key] }
       } else {
-        if (key == '_set') {
+        if (key === '_set') {
           this._argBindings += `${key}:$${key}`
           this._argVariables += this._schema.replace(this._prefix, '') + key + '_input '
         } else {
@@ -54,7 +54,7 @@ export default class Update extends Hasura {
         }
 
         this._variables = Object.assign(this._variables, {
-          _set: key == '_set' ? value[key] : value
+          _set: key === '_set' ? value[key] : value
         })
       }
     })
