@@ -6,6 +6,13 @@ export interface Contructor {
   _fields?: string
   _schemaArguments?: object
   _alias?: string
+  _variableArguments?: VaribaleArguments
+}
+
+export interface VaribaleArguments {
+  binding: string
+  arg: object
+  variables: object
 }
 
 export interface MainContructor {
@@ -15,4 +22,5 @@ export interface MainContructor {
   _fields?: string
   _schemaArguments?: object
   _alias?: string
+  _variableArguments?: VaribaleArguments
 }

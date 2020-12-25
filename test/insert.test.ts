@@ -76,8 +76,28 @@ describe('Insert test', () => {
 
     // console.log(ins.query())
   })
+
+  it('insert 2', () => {
+    const ins = new Insert({ _schema: 'products', _schemaArguments: { sort: 1 } })
+
+      .insert({
+        addins: { a: 'a', b: 'b' },
+        category_locales: {
+          description: 'asasda',
+          code: 'ru',
+          name: 'asdasd'
+        }
+      })
+      .select('id')
+
+    // console.log(ins.query())
+    // console.log( ins.variables())
+    expect(ins.query()).toBeTruthy()
+
+    // console.log(ins.query())
+  })
   it('insert', () => {
-    const ins = new Insert({ _schema: 'products' })
+    const ins = new Insert({ _schema: 'products', _schemaArguments: { sort: 1 } })
 
       .insert([
         { a: 1, b: 2 },

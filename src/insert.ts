@@ -4,7 +4,6 @@ import { Contructor } from './intefaces'
 
 export default class Insert extends Hasura {
   private _object: any = ''
-  private _batch = false
   private _prefix: string
   private _conflicts:
     | {
@@ -33,11 +32,7 @@ export default class Insert extends Hasura {
   }
 
   insert(args: any) {
-    if (!args.on_conflict || !args.objects) {
-      this._batch = true
-    }
-
-    this._object += stringify(hasRelation(args), !this._batch) + ' , '
+    this._object = { ...this._object, ...hasRelation(args) }
 
     return this
   }
@@ -55,7 +50,7 @@ export default class Insert extends Hasura {
   }
 
   variables() {
-    return this.schemaArguments + this._object
+    return { data: { ...this._object, ...this._schemaArguments } }
   }
 
   query() {

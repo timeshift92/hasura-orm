@@ -1,6 +1,6 @@
 import { stringify } from './helper'
 import HasuraORM from './hasura-orm'
-import { MainContructor } from './intefaces'
+import { MainContructor, VaribaleArguments } from './intefaces'
 
 interface OrderBy {
   [key: string]:
@@ -21,13 +21,23 @@ export default class Hasura {
   protected _with = ''
   protected _compose = ''
   protected provider: any = {}
+  protected _variableArguments: VaribaleArguments = {
+    binding: '',
+    arg: {},
+    variables: {}
+  }
   constructor({
     _schema,
     provider = {},
     _with = '',
     _fields = '',
     _schemaArguments = {},
-    _alias = ''
+    _alias = '',
+    _variableArguments = {
+      binding: '',
+      arg: {},
+      variables: {}
+    }
   }: MainContructor) {
     this.provider = provider
     this._schema = _schema
@@ -35,6 +45,7 @@ export default class Hasura {
     this._fields = _fields
     this._schemaArguments = _schemaArguments
     this._alias = _alias
+    this._variableArguments = _variableArguments
   }
   public get schemaArguments(): string {
     return stringify(this._schemaArguments)
@@ -71,9 +82,21 @@ export default class Hasura {
     this.addArg('order_by', orderBy)
     return this
   }
+  concatVariables(_variableArguments: VaribaleArguments, is_composer = false) {
+    if (this._variableArguments) {
+      this._variableArguments.arg = { ..._variableArguments.arg, ...this._variableArguments.arg }
+      if (is_composer == false) this._variableArguments.binding = _variableArguments.binding
+      this._variableArguments.variables = {
+        ...this._variableArguments.variables,
+        ..._variableArguments.variables
+      }
+    }
+  }
+
   compose(schema: string, callback: (Hasura: HasuraORM) => Hasura) {
     let qr = callback(new HasuraORM({ _schema: schema, provider: this.provider }))
     this._compose += qr.parsed()
+    this.concatVariables(qr._variableArguments, true)
 
     return this
   }

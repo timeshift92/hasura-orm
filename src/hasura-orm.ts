@@ -6,6 +6,7 @@ import { MainContructor } from './intefaces'
 
 export default class HasuraORM extends Hasura {
   constructor({
+    _variableArguments,
     _schema,
     provider = {},
     _with = '',
@@ -13,10 +14,11 @@ export default class HasuraORM extends Hasura {
     _schemaArguments = {},
     _alias = ''
   }: MainContructor) {
-    super({ _schema, provider, _with, _fields, _schemaArguments, _alias })
+    super({ _schema, provider, _with, _fields, _schemaArguments, _alias, _variableArguments })
   }
   insert(args: any, _prefix = 'insert_'): Insert {
     return new Insert({
+      _variableArguments: this._variableArguments,
       _prefix,
       _schema: this._schema,
       provider: this.provider,
@@ -28,6 +30,7 @@ export default class HasuraORM extends Hasura {
   }
   update(args: any, _prefix = 'update_'): Update {
     return new Update({
+      _variableArguments: this._variableArguments,
       _prefix,
       _schema: this._schema,
       provider: this.provider,
@@ -40,6 +43,7 @@ export default class HasuraORM extends Hasura {
 
   delete(args: any, _prefix = 'delete_'): Delete {
     return new Delete({
+      _variableArguments: this._variableArguments,
       _prefix,
       _schema: this._schema,
       provider: this.provider,

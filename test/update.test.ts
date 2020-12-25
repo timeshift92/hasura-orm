@@ -1,7 +1,6 @@
 import Update from '../src/hasura-orm'
 import Insert from '../src/insert'
 import Upd from '../src/update'
-import { lstat } from 'fs'
 
 describe('updert test', () => {
   let params: any = {
@@ -131,6 +130,29 @@ describe('updert test', () => {
       .update({ _set: { sort: 1, data: 'asdas' } }, '')
       .update({ _append: { addins: { a: 1 } } })
       .where({ id: 1 })
+    // console.log(query.query())
+    expect(query.mutate()).toBeTruthy()
+  })
+
+  it('update composer', () => {
+    const provider = {
+      mutate: ({ query, variables }: any) => {
+        console.log(query)
+        console.log(variables)
+        return query
+      }
+    }
+
+    let query = new Update({ _schema: 'categories', provider })
+      .update({ _set: { sort: 1, addins: { test: '1' } } })
+      .where({ id: 'b2284d8a-68bf-47fb-a619-f496df4e67e0' })
+      .compose('category_locales', upd => {
+        return upd
+
+          .update({ name: 'asdasd', description: 'asdasda' })
+          .where({ category_id: 'b2284d8a-68bf-47fb-a619-f496df4e67e0' })
+      })
+
     // console.log(query.query())
     expect(query.mutate()).toBeTruthy()
   })
