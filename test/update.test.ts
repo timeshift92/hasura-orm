@@ -46,7 +46,8 @@ describe('updert test', () => {
     expect(
       new Upd({ _prefix: 'test', _schema: 'asd', provider: {}, _schemaArguments: {}, _alias: 'as' })
         .where({ id: 1 })
-        .update({ rest: 1, article: 'asdgasdgsadg' })
+        .update({ rest: 1, article: 'asdgasdgsadg' }, { _append: '1' })
+        .update({ _append: { addins: { z: 1 } } })
         .query()
     ).toBeTruthy()
   })
@@ -106,6 +107,33 @@ describe('updert test', () => {
 
     // console.log(upd.query())
   })
+  it('with _set key', () => {
+    const provider = {
+      mutate: ({ query }: any) => {
+        return query
+      }
+    }
+
+    let query = new Update({ _schema: 'categories', provider })
+      .update({ _set: { sort: 1, data: 'asdas' } })
+      .update({ _append: { addins: { a: 1 } } })
+      .where({ id: 1 })
+    expect(query.mutate()).toBeTruthy()
+  })
+  it('with empty  prefix', () => {
+    const provider = {
+      mutate: ({ query }: any) => {
+        return query
+      }
+    }
+
+    let query = new Update({ _schema: 'categories', provider })
+      .update({ _set: { sort: 1, data: 'asdas' } }, '')
+      .update({ _append: { addins: { a: 1 } } })
+      .where({ id: 1 })
+    // console.log(query.query())
+    expect(query.mutate()).toBeTruthy()
+  })
 
   it('check provider', () => {
     const provider = {
@@ -114,9 +142,11 @@ describe('updert test', () => {
       }
     }
 
-    let query = new Update({ _schema: 'products', provider })
-      .update({ rest: 1, article: 'asdgasdgsadg' })
+    let query = new Update({ _schema: 'categories', provider })
+      .update({ sort: 1 })
+      .update({ _append: { addins: { a: 1 } } })
       .where({ id: 1 })
+    // console.log(query.query())
     expect(query.mutate()).toBeTruthy()
   })
 })

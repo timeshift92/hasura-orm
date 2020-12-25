@@ -49,7 +49,29 @@ describe('Insert test', () => {
       .with('test', query => {
         return query.select('id')
       })
+    expect(ins.query()).toBeTruthy()
+
     // console.log(ins.query())
+  })
+
+  it('insert when conflict', () => {
+    const ins = new Insert({ _schema: 'categories' })
+      .alias('asd')
+      .insert(params)
+      .conflicts({
+        constraint: 'categories_pkey',
+        update_columns: ['addins'],
+        where: {
+          id: { _eq: '1' }
+        }
+      })
+      .select('sort id')
+      .with('category_locales', query => {
+        return query.select('category_id')
+      })
+    // console.log(ins.query())
+    // console.log(ins.variables())
+
     expect(ins.query()).toBeTruthy()
 
     // console.log(ins.query())
