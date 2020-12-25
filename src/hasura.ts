@@ -82,10 +82,10 @@ export default class Hasura {
     this.addArg('order_by', orderBy)
     return this
   }
-  concatVariables(_variableArguments: VaribaleArguments, is_composer = false) {
+  concatVariables(_variableArguments: VaribaleArguments, isComposer = false) {
     if (this._variableArguments) {
       this._variableArguments.arg = { ..._variableArguments.arg, ...this._variableArguments.arg }
-      if (is_composer == false) this._variableArguments.binding = _variableArguments.binding
+      if (isComposer === false) this._variableArguments.binding = _variableArguments.binding
       this._variableArguments.variables = {
         ...this._variableArguments.variables,
         ..._variableArguments.variables
