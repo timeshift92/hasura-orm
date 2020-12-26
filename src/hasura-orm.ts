@@ -1,4 +1,4 @@
-import Update from './update'
+import Update, { UpdateType } from './update'
 import Insert from './insert'
 import Hasura from './hasura'
 import Delete from './delete'
@@ -28,7 +28,7 @@ export default class HasuraORM extends Hasura {
       _alias: this._alias
     }).insert(args)
   }
-  update(args: any, _prefix = 'update_'): Update {
+  update(args: UpdateType, _prefix = 'update_'): Update {
     return new Update({
       _variableArguments: this._variableArguments,
       _prefix,

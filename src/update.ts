@@ -10,7 +10,7 @@ type UpdateTypeKey =
   | '_delete_key'
   | '_inc'
   | '_prepand'
-type UpdateType =
+export type UpdateType =
   | {
       [key in UpdateTypeKey]: any
     }

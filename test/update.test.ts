@@ -137,8 +137,8 @@ describe('updert test', () => {
   it('update composer', () => {
     const provider = {
       mutate: ({ query, variables }: any) => {
-        console.log(query)
-        console.log(variables)
+        // console.log(query)
+        // console.log(variables)
         return query
       }
     }
