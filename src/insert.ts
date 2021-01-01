@@ -13,7 +13,8 @@ export default class Insert extends Hasura {
           where?: Object
         }
       }
-    | {} = {}
+    | {}
+    | any = {}
   constructor({
     _prefix = 'insert_',
     _schema,
@@ -27,7 +28,8 @@ export default class Insert extends Hasura {
     this._prefix = _prefix
   }
   conflicts(args: { constraint: string; update_columns: Array<any>; where?: Object }) {
-    this._conflicts = { on_conflict: args }
+    this._conflicts = ` on_conflict: {${stringify(args, false, true)}} `
+
     return this
   }
 
@@ -42,7 +44,7 @@ export default class Insert extends Hasura {
   }
 
   parsed() {
-    let schemaArgs = `(objects:$data ${stringify(this._conflicts)})`
+    let schemaArgs = `(objects:$data ${stringify(this._conflicts, true)})`
 
     return ` ${this._alias}${this._schema} ${schemaArgs} {  ${
       this._fields ? ' returning { ' + this.getFields() + ' }' : 'affected_rows'

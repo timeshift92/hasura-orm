@@ -57,12 +57,12 @@ describe('Query test', () => {
       .where({
         _or: { article: { _eq: '1' }, _and: [{ article: { _eq: '2' }, rest: { _gt: 2 } }] }
       })
-      .orderBy({ rest: 'asc' })
+      .orderBy({ rest: 'asc', asda: 'desc' })
       .distinct('rest')
       .paginate(5, 0)
       .paginate(5, 0)
 
-    // console.log(query)
+    console.log(query.query())
     expect(query.query()).toBeTruthy()
     expect(query.subscriptionQuery()).toBeTruthy()
   })

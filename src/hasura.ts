@@ -79,7 +79,7 @@ export default class Hasura {
   }
 
   orderBy(orderBy: OrderBy | any): Hasura {
-    this.addArg('order_by', orderBy)
+    this.addArg('order_by', { ['@cl']: stringify(orderBy, false, true) })
     return this
   }
   concatVariables(_variableArguments: VaribaleArguments, isComposer = false) {
