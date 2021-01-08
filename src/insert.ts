@@ -61,7 +61,6 @@ export default class Insert extends Hasura {
   }
 
   query() {
-    let args = this.schemaArguments + this._variableArguments.binding
-    return `mutation (${args}){  ${this.parsed()}  }`
+    return `mutation (${stringify(this._variableArguments.arg, false, true)}){  ${this.parsed()}  }`
   }
 }
