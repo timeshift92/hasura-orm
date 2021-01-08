@@ -10,7 +10,7 @@ export interface Contructor {
 }
 
 export interface VaribaleArguments {
-  binding: string
+  binding?: string
   arg: object
   variables: object
 }

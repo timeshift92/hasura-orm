@@ -18,7 +18,7 @@ export type UpdateType =
 export default class Update extends Hasura {
   private _prefix: string = ''
   constructor({
-    _prefix,
+    _prefix = '',
     _schema,
     provider,
     _with,

@@ -2,7 +2,18 @@ import Update from '../src/hasura-orm'
 import Insert from '../src/insert'
 import Upd from '../src/update'
 
-describe('updert test', () => {
+describe('update test', () => {
+  it('new bug for composer update and insert', () => {
+    const qr = new Upd({ _schema: 'products' })
+      .update({ type: 3 })
+      .compose('online_chat_mc_conversation_user', mcu => {
+        return mcu.insert({ conversation_id: 'asdasdas', user_id: 'asdasd' })
+      })
+      .where({ id: 'asdasdasd' })
+
+    console.log(qr.query())
+  })
+
   let params: any = {
     product_locales: [
       {

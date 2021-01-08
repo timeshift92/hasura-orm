@@ -35,24 +35,29 @@ export default class Insert extends Hasura {
 
   insert(args: any) {
     this._object = { ...this._object, ...hasRelation(args) }
-
+    const arg = `${this._schema}${new Date().getTime()}`
+    this.concatVariables({
+      binding: `objects:$${arg}`,
+      arg: { ['$' + arg]: `[${this._schema.replace(this._prefix, '')}_insert_input!]!` },
+      variables: { [arg]: { ...this._object, ...this._schemaArguments } }
+    })
     return this
   }
 
   mutate<T>(): Promise<T> {
-    return this.provider.mutate({ query: this.query(), variables: this.variables() })
+    return this.provider.mutate({
+      query: this.query(),
+      variables: this._variableArguments.variables
+    })
   }
 
   parsed() {
-    let schemaArgs = `(objects:$data ${stringify(this._conflicts, true)})`
+    let args = this.schemaArguments + this._variableArguments.binding
+    let schemaArgs = `(${args} ${stringify(this._conflicts, true)})`
 
     return ` ${this._alias}${this._schema} ${schemaArgs} {  ${
       this._fields ? ' returning { ' + this.getFields() + ' }' : 'affected_rows'
     } }`
-  }
-
-  variables() {
-    return { data: { ...this._object, ...this._schemaArguments } }
   }
 
   query() {
