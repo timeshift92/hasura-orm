@@ -2,6 +2,7 @@ import Hasura from './hasura'
 import Insert from './insert'
 import { stringify } from './helper'
 import { Contructor } from './intefaces'
+import { time } from 'console'
 type UpdateTypeKey =
   | '_set'
   | '_append'
@@ -16,6 +17,8 @@ export type UpdateType =
     }
   | { [key: string]: any }
 export default class Update extends Hasura {
+  index = 0
+  prevIndex = 0
   private _prefix: string = ''
   constructor({
     _prefix = '',
@@ -39,24 +42,32 @@ export default class Update extends Hasura {
       '_inc',
       '_prepand'
     ]
-    args.forEach((value: UpdateType | any, index) => {
+    args.forEach((value: UpdateType | any) => {
+      if (!this.prevIndex) this.prevIndex = Hasura.index
       const key = Object.keys(value)[0]
       const arg = keys.includes(key)
-        ? `$${key}_${this._schema.replace(this._prefix, '')}_${index}`
-        : `$_set_${this._schema.replace(this._prefix, '')}_${index}`
-      if (keys.includes(key)) {
+        ? `$${key}_${this._schema.replace(this._prefix, '')}_${this.prevIndex}`
+        : `$_set_${this._schema.replace(this._prefix, '')}_${this.prevIndex}`
+      if (keys.includes(key) && this.index == 0) {
         this.concatVariables({
           arg: { [arg]: this._schema.replace(this._prefix, '') + key + '_input ' },
           binding: `${key}:${arg}`,
           variables: { [arg.replace('$', '')]: value[key] }
         })
-      } else {
+      } else if (this.index == 0) {
         this.concatVariables({
           arg: { [arg]: this._schema.replace(this._prefix, '') + '_set_input ' },
           binding: `_set:${arg}`,
           variables: { [arg.replace('$', '')]: value }
         })
+      } else {
+        this._variableArguments.variables[arg.replace('$', '')] = {
+          ...this._variableArguments.variables[arg.replace('$', '')],
+          ...value
+        }
       }
+      this.index++
+      Hasura.index++
     })
 
     return this

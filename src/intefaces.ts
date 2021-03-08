@@ -12,7 +12,7 @@ export interface Contructor {
 export interface VaribaleArguments {
   binding?: string
   arg: object
-  variables: object
+  variables: any
 }
 
 export interface MainContructor {

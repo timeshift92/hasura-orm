@@ -186,16 +186,30 @@ describe('update test', () => {
   })
 
   it('check duplicate', () => {
-    const qr = new HasuraORM({ _schema: 'sections' })
+    const provider = {
+      mutate: ({ query, variables }: any) => {
+        return query
+      }
+    }
+    const qr = new HasuraORM({ _schema: 'uztelecom_sections', provider })
       .update({ id: 1 })
       .where({ id: 1 })
       .select('id')
-    qr.compose('tes', q => {
-      return q.update({ id: 1 }).where({ id: 3 })
+    qr.compose('uztelecom_section_locales', q => {
+      return q
+        .update({ id: 1 })
+        .where({ id: 3 })
+        .alias('sc_1')
+    })
+    qr.compose('uztelecom_section_locales', q => {
+      return q
+        .update({ id: 2 })
+        .where({ id: 1 })
+        .alias('sc_2')
     })
 
     qr.update({ als: 11 })
 
-    console.log(qr.query())
+    qr.mutate()
   })
 })
