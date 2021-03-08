@@ -80,7 +80,7 @@ export default class Update extends Hasura {
     if (Object.keys(this._where).length === 0) {
       throw new Error('where condition need')
     }
-    let args = this.schemaArguments + this._variableArguments.binding
+    let args = this.schemaArguments
 
     return ` ${this._alias}${this._schema} ${'(' + args + ' )'}{ ${
       this._fields ? ' returning { ' + this.getFields() + ' }' : 'affected_rows'
