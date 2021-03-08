@@ -87,7 +87,7 @@ export default class Hasura {
       this._variableArguments.arg = { ..._variableArguments.arg, ...this._variableArguments.arg }
       if (
         isComposer === false &&
-        this._variableArguments.binding?.trim() != _variableArguments.binding?.trim()
+        this._variableArguments.binding?.trim() !== _variableArguments.binding?.trim()
       ) {
         this._variableArguments.binding += ' ' + _variableArguments.binding
       }
