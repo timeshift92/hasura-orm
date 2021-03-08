@@ -188,6 +188,7 @@ describe('update test', () => {
   it('check duplicate', () => {
     const provider = {
       mutate: ({ query, variables }: any) => {
+        console.log(variables)
         return query
       }
     }
@@ -210,6 +211,6 @@ describe('update test', () => {
 
     qr.update({ als: 11 })
 
-    qr.mutate()
+    console.log(qr.mutate())
   })
 })

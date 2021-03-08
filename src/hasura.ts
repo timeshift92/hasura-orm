@@ -12,7 +12,7 @@ interface OrderBy {
     | 'desc_nulls_last'
 }
 export default class Hasura {
-  static index = 0
+  static index = 1
   protected _fields: string = ''
   protected _paginate: any = ''
   protected _alias: string = ''
@@ -89,7 +89,7 @@ export default class Hasura {
       if (isComposer === false && this._variableArguments.binding?.trim().indexOf('_set:') === -1) {
         this._variableArguments.binding += ' ' + _variableArguments.binding
       }
-      console.log(this._variableArguments.variables)
+
       this._variableArguments.variables = {
         ...this._variableArguments.variables,
         ..._variableArguments.variables
