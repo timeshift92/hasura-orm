@@ -48,13 +48,13 @@ export default class Update extends Hasura {
       const arg = keys.includes(key)
         ? `$${key}_${this._schema.replace(this._prefix, '')}_${this.prevIndex}`
         : `$_set_${this._schema.replace(this._prefix, '')}_${this.prevIndex}`
-      if (keys.includes(key) && this.index == 0) {
+      if (keys.includes(key) && this.index === 0) {
         this.concatVariables({
           arg: { [arg]: this._schema.replace(this._prefix, '') + key + '_input ' },
           binding: `${key}:${arg}`,
           variables: { [arg.replace('$', '')]: value[key] }
         })
-      } else if (this.index == 0) {
+      } else if (this.index === 0) {
         this.concatVariables({
           arg: { [arg]: this._schema.replace(this._prefix, '') + '_set_input ' },
           binding: `_set:${arg}`,
