@@ -86,7 +86,7 @@ export default class Hasura {
   concatVariables(_variableArguments: VaribaleArguments, isComposer = false) {
     if (this._variableArguments) {
       this._variableArguments.arg = { ..._variableArguments.arg, ...this._variableArguments.arg }
-      if (isComposer === false && this._variableArguments.binding?.trim().indexOf('_set:') == -1) {
+      if (isComposer === false && this._variableArguments.binding?.trim().indexOf('_set:') === -1) {
         this._variableArguments.binding += ' ' + _variableArguments.binding
       }
       console.log(this._variableArguments.variables)
