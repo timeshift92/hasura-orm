@@ -85,7 +85,12 @@ export default class Hasura {
   concatVariables(_variableArguments: VaribaleArguments, isComposer = false) {
     if (this._variableArguments) {
       this._variableArguments.arg = { ..._variableArguments.arg, ...this._variableArguments.arg }
-      if (isComposer === false) this._variableArguments.binding += ' ' + _variableArguments.binding
+      if (
+        isComposer === false &&
+        this._variableArguments.binding?.trim() != _variableArguments.binding?.trim()
+      ) {
+        this._variableArguments.binding += ' ' + _variableArguments.binding
+      }
       this._variableArguments.variables = {
         ...this._variableArguments.variables,
         ..._variableArguments.variables

@@ -1,3 +1,5 @@
+import Hasura from '../src/hasura'
+import HasuraORM from '../src/hasura-orm'
 import Update from '../src/hasura-orm'
 import Insert from '../src/insert'
 import Upd from '../src/update'
@@ -11,7 +13,7 @@ describe('update test', () => {
       })
       .where({ id: 'asdasdasd' })
 
-    console.log(qr.query())
+    // console.log(qr.query())
   })
 
   let params: any = {
@@ -181,5 +183,19 @@ describe('update test', () => {
       .where({ id: 1 })
     // console.log(query.query())
     expect(query.mutate()).toBeTruthy()
+  })
+
+  it('check duplicate', () => {
+    const qr = new HasuraORM({ _schema: 'sections' })
+      .update({ id: 1 })
+      .where({ id: 1 })
+      .select('id')
+    qr.compose('tes', q => {
+      return q.update({ id: 1 }).where({ id: 3 })
+    })
+
+    qr.update({ als: 11 })
+
+    console.log(qr.query())
   })
 })
