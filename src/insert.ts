@@ -34,12 +34,19 @@ export default class Insert extends Hasura {
   }
 
   insert(args: any) {
-    this._object = { ...this._object, ...hasRelation(args) }
+    if (Array.isArray(args)) {
+      this._object = hasRelation(args)
+    } else {
+      this._object = { ...this._object, ...hasRelation(args) }
+    }
+
     const arg = `${this._schema}${new Date().getTime()}`
     this.concatVariables({
       binding: `objects:$${arg}`,
       arg: { ['$' + arg]: `[${this._schema.replace(this._prefix, '')}_insert_input!]!` },
-      variables: { [arg]: { ...this._object, ...this._schemaArguments } }
+      variables: {
+        [arg]: Array.isArray(args) ? this._object : { ...this._object, ...this._schemaArguments }
+      }
     })
     return this
   }
