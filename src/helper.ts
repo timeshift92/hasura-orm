@@ -1,7 +1,8 @@
 export function stringify(object: any, trim = true, rpRight = false): any {
   let res = JSON.stringify(object)
-    .replace(/\"@cl\":(")([\w:\s,]+)["]/g, '$2')
-    .replace(/(\"order_by\":\{\"[\w,]+\":)\"([^"]+)\"/g, '$1$2')
+    // .replace(/\"@cl\":(")([{\w:\s,]+)[{"]/g, '$2')
+    .replace(/(\"order_by\":\{\"[\w]+\":|{|:{|:)\"([^"]+)\"/g, '$1$2')
+    // .replace(/(\"order_by\":\{\"[\w,]+\":)\"([^"]+)\"/g, '$1$2')
     .replace(/((\"distinct_on\"|\"constraint\"):)\"([^"]+)\",/g, '$1$3,')
     .replace(/\"([^"]+)\":/g, '$1:')
   if (trim) {

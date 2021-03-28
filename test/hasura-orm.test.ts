@@ -99,9 +99,11 @@ describe('Query test', () => {
         _or: { article: { _eq: '1' }, _and: [{ article: { _eq: '2' }, rest: { _gt: 2 } }] }
       })
       .orderBy({ rest: 'asc' })
+      .orderBy({ section_locales_aggregate: { min: { title: 'asc' } } })
       .distinct('rest')
       .paginate(5, 0)
       .paginate(5, 0)
+    console.log(query.query())
     expect(query.get()).toBeTruthy()
     expect(query.get(false)).toBeTruthy()
 
