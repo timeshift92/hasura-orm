@@ -10,42 +10,38 @@ npm i hasura-orm
 yarn add hasura-orm
 ```
 
-## how-to use
-
+## how-to use with svelte-graphql
+src/core/svqlConfig.ts
 ```ts
+import { svqlConfig } from 'graphql-svelte'
 import Hasura from 'hasura-orm';
-import { GraphQLProvider, reportCacheErrors } from "graphql-svelte";
-
-let accessToken;
-
-function getToken() {
-	return accessToken ? `Bearer ${accessToken}` : ''
-}
-
-let client = GraphQLProvider({
-	url: 'http://localhost:8082/v1/graphql',
-	headers: () => ({
-		"content-type": "application/json",
-		"x-hasura-admin-secret": "secret",
-		authorization: getToken(),
-	}),
-	ws: {
-		url: 'wss://go.pyrex.uz/v1/graphql'
-	}
+import {writable} from 'svelte/store'
+// graphUrl = "htpp://graphql-server/v1/graphql"
+export let _client = svqlConfig.getClient({
+	url: graphUrl, wsUrl: graphUrl.replace('http', 'ws')
 })
 
-client.graphql.on('cache', reportCacheErrors)
+let accessToken$ = writable();
 
-export default function hasura(schema) {
-	Hasura.provider = client;
-	const orm = new Hasura(schema)
-	orm.provider = client;
-	return orm;
+accessToken$.subscribe(token => {
+	if (token) {
+		svqlConfig.setHeaders({ ...svqlConfig.headers, 'authorization': `Bearer ${token}` })
+	}
+});
+
+
+export function hasura(_schema) {
+	Hasura['provider'] = client()
+	const orm = new Hasura({ _schema })
+	orm['provider'] = client()
+	return orm
 }
 ```
 
+## query Example
 ```ts
-import hasura from 'your/path/to/hasura'
+
+import {hasura} from 'src/core/svqlConfig'
 
 const query = hasura('products')
       .where({ 'id': 1, 'product_locales': { "name": { "_ilike": "test" } } })
@@ -67,7 +63,42 @@ const query = hasura('products')
       .paginate(5, 0)
       .query()
 ```
+Insert
+``` ts
+import {hasura} from 'src/core/svqlConfig'
 
+ hasura('categories')
+      .alias('asd')
+      .insert(params)
+      .conflicts({
+        constraint: 'categories_pkey',
+        update_columns: ['addins'],
+        where: {
+          id: { _eq: '1' }
+        }
+      })
+      .select('sort id')
+      .with('category_locales', query => {
+        return query.select('category_id')
+      })
+
+```
+
+Update
+
+```ts
+
+ hasura('categories')
+        .where({ id: 1 })
+        .update({ rest: 1, article: 'asdgasdgsadg' }, { _append: '1' })
+        .update({ _append: { addins: { z: 1 } } })
+        .query()
+
+```
+Delete
+```ts
+hasura('products').select('id').delete({ rest: 1 })
+```
 !!! note the provider can be anything but I use my own as an example.
 
 ## api 
